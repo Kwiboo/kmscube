@@ -470,6 +470,8 @@ static int init_tex_nv12_1img(void)
 		EGL_DMA_BUF_PLANE1_FD_EXT, fd_uv,
 		EGL_DMA_BUF_PLANE1_OFFSET_EXT, 0,
 		EGL_DMA_BUF_PLANE1_PITCH_EXT, stride_uv,
+		EGL_YUV_COLOR_SPACE_HINT_EXT, EGL_ITU_REC709_EXT,
+		EGL_SAMPLE_RANGE_HINT_EXT, EGL_YUV_NARROW_RANGE_EXT,
 		EGL_NONE, EGL_NONE,	/* modifier lo */
 		EGL_NONE, EGL_NONE,	/* modifier hi */
 		EGL_NONE, EGL_NONE,	/* modifier lo */
