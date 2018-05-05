@@ -226,7 +226,7 @@ static int get_fd_rgba(uint32_t *pstride, uint64_t *modifier, struct gbm_bo **bo
 	int fd;
 
 	/* NOTE: do not actually use GBM_BO_USE_WRITE since that gets us a dumb buffer: */
-	*bo = gbm_bo_create(gl.gbm->dev, texw, texh, GBM_FORMAT_ABGR8888, GBM_BO_USE_LINEAR);
+	*bo = gbm_bo_create(gl.gbm->dev, texw, texh, GBM_FORMAT_RGBA8888, GBM_BO_USE_LINEAR);
 	assert(*bo);
 
 	map = gbm_bo_map(*bo, 0, 0, texw, texh, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
@@ -322,7 +322,7 @@ static int init_tex_rgba(void)
 	EGLint attr[] = {
 		EGL_WIDTH, texw,
 		EGL_HEIGHT, texh,
-		EGL_LINUX_DRM_FOURCC_EXT, DRM_FORMAT_ABGR8888,
+		EGL_LINUX_DRM_FOURCC_EXT, DRM_FORMAT_RGBA8888,
 		EGL_DMA_BUF_PLANE0_FD_EXT, fd,
 		EGL_DMA_BUF_PLANE0_OFFSET_EXT, 0,
 		EGL_DMA_BUF_PLANE0_PITCH_EXT, stride,
