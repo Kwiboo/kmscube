@@ -259,9 +259,14 @@ static int get_fd_y(uint32_t *pstride, uint64_t *modifier, struct gbm_bo **bo)
 
 	/* NOTE: do not actually use GBM_BO_USE_WRITE since that gets us a dumb buffer: */
 	*bo = gbm_bo_create(gl.gbm->dev, texw, texh, GBM_FORMAT_R8, GBM_BO_USE_LINEAR);
-	assert(*bo);
+	if (*bo) {
+		map = gbm_bo_map(*bo, 0, 0, texw, texh, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+	} else {
+		*bo = gbm_bo_create(gl.gbm->dev, texw/4, texh, GBM_FORMAT_RGBA8888, GBM_BO_USE_LINEAR);
+		assert(*bo);
 
-	map = gbm_bo_map(*bo, 0, 0, texw, texh, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+		map = gbm_bo_map(*bo, 0, 0, texw/4, texh, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+	}
 
 	for (uint32_t i = 0; i < texh; i++) {
 		memcpy(&map[stride * i], &src[texw * i], texw);
@@ -291,9 +296,14 @@ static int get_fd_uv(uint32_t *pstride, uint64_t *modifier, struct gbm_bo **bo)
 
 	/* NOTE: do not actually use GBM_BO_USE_WRITE since that gets us a dumb buffer: */
 	*bo = gbm_bo_create(gl.gbm->dev, texw/2, texh/2, GBM_FORMAT_GR88, GBM_BO_USE_LINEAR);
-	assert(*bo);
+	if (*bo) {
+		map = gbm_bo_map(*bo, 0, 0, texw/2, texh/2, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+	} else {
+		*bo = gbm_bo_create(gl.gbm->dev, texw/2/2, texh/2, GBM_FORMAT_RGBA8888, GBM_BO_USE_LINEAR);
+		assert(*bo);
 
-	map = gbm_bo_map(*bo, 0, 0, texw/2, texh/2, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+		map = gbm_bo_map(*bo, 0, 0, texw/2/2, texh/2, GBM_BO_TRANSFER_WRITE, &stride, &map_data);
+	}
 
 	for (uint32_t i = 0; i < texh/2; i++) {
 		memcpy(&map[stride * i], &src[texw * i], texw);
